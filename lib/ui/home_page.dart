@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:task_reminder/services/notification_services.dart';
 import 'package:task_reminder/services/theme_service.dart';
+import 'package:task_reminder/ui/theme.dart';
+import 'package:task_reminder/ui/widgets/button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({ Key? key }) : super(key: key);
@@ -30,8 +33,22 @@ class _HomePageState extends State<HomePage> {
       appBar: _appBar(),
       body: Column(
         children: [
-          Text("Theme Data", 
-          style: TextStyle(fontSize: 30),
+          Container(
+            margin: const EdgeInsets.only(left: 20, right: 20, top:10),
+            child: Row(
+              mainAxisAlignment:MainAxisAlignment.spaceBetween,
+              children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(DateFormat.yMMMd().format(DateTime.now()),
+                  style: subHeadingStyle,
+                  ),
+                  Text("Today", style: headingStyle,)
+                ],
+              ),
+              MyButton(label: "+ Add Task", onTap: ()=>null)
+            ],),
           )
       ],)
     );
@@ -40,6 +57,8 @@ class _HomePageState extends State<HomePage> {
 
   _appBar(){
     return AppBar(
+      elevation:0,
+      backgroundColor: context.theme.backgroundColor,
       leading: GestureDetector(
         onTap:(){
           ThemeService().switchTheme();
@@ -53,13 +72,16 @@ class _HomePageState extends State<HomePage> {
           //scheduled notification function
           notifyHelper.scheduledNotification();
         } ,
-        child: Icon(Icons.nightlight_sharp,
+        child: Icon(Get.isDarkMode ? Icons.wb_sunny_outlined : Icons.nightlight_round,
         size: 20,
+        color: Get.isDarkMode ? Colors.white:Colors.black,
         ),
       ),
       actions: [
-        Icon(Icons.person,
-        size: 20,
+        CircleAvatar(
+          backgroundImage:AssetImage(
+            "images/smart.jpg" 
+          ),
         ),
         SizedBox(width: 20,)
       ],
